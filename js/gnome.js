@@ -1,7 +1,11 @@
 let myGamePiece;
-let myPrincess;
+let myFinn;
+let myGnome1;
+let myGnome2;
+let myGnome3;
 let myObstacle;
 let mySecondObstacle;
+let myThirdObstacle;
 let myBackground;
 
 let myGameArea = {
@@ -30,11 +34,15 @@ let myGameArea = {
 
 function startGame() {
   myGameArea.start();
-  myGamePiece = new component("image", 43, 70, "./assets/img/finn-L1.png", 10, 430);
-  myPrincess = new component("image", 70, 70, "./assets/img/princess.png", 550, 0);
-  myObstacle = new component("image", 100, 35, "./assets/img/gumdrops.png", 250, 375);
-  mySecondObstacle = new component("image", 100, 35, "./assets/img/gumdrops.png", 450, 275);
-  myBackground = new component("image", 2000, 500, "./assets/img/bg.jpg", 0, 0);
+  myFinn = new component("image", 43, 70, "./assets/img/finn-R1.png", 10, 430);
+  myGamePiece = new component("image", 43, 70, "./assets/img/jake-L.png", 10, 430);
+  myGnome1 = new component("image", 70, 70, "./assets/img/gnome1.png", 525, 0);
+  myGnome2 = new component("image", 70, 70, "./assets/img/gnome2.png", 500, 0);
+  myGnome3 = new component("image", 70, 70, "./assets/img/gnome3.png", 550, 0);
+  myObstacle = new component("image", 100, 35, "./assets/img/log.png", 250, 375);
+  mySecondObstacle = new component("image", 100, 35, "./assets/img/log.png", 450, 275);
+  myThirdObstacle = new component("image", 100, 35, "./assets/img/log.png", 150, 175);
+  myBackground = new component("image", 2000, 500, "./assets/img/gnomebg.jpg", 0, 0);
   $(".col-md-8" ).append( myGameArea.canvas);
 };
 
@@ -136,19 +144,23 @@ function updateGameArea() {
     myGamePiece.y = mySecondObstacle.y - myGamePiece.height;
     myGamePiece.gravitySpeed = 0;
     myGamePiece.jump = 0;
+  } else if (myGamePiece.crashWith(myThirdObstacle)){
+    myGamePiece.y = myThirdObstacle.y - myGamePiece.height;
+    myGamePiece.gravitySpeed = 0;
+    myGamePiece.jump = 0;
   }
-  if (myGamePiece.x > myPrincess.x - myGamePiece.width && myGamePiece.x < myPrincess.x + myGamePiece.width && myGamePiece.y > myPrincess.y - myGamePiece.height && myGamePiece.y < myPrincess.y + myGamePiece.height){
-    myPrincess.x = myGamePiece.x + 25;
-    myPrincess.y = myGamePiece.y - 25; 
-    setTimeout(function(){
-      window.location.href = "gnomes.html";
-    }, 1350)
-  } else if (myPrincess.crashWith(myGamePiece)){
-    window.location.href = "gnomes.html";
-  } else if (myPrincess.y === myGameArea.canvas.height - myPrincess.height) {
-    myGameArea.stop();
-    window.location.href = "game-over.html";
-  } 
+  // if (myGamePiece.x > myPrincess.x - myGamePiece.width && myGamePiece.x < myPrincess.x + myGamePiece.width && myGamePiece.y > myPrincess.y - myGamePiece.height && myGamePiece.y < myPrincess.y + myGamePiece.height){
+  //   myPrincess.x = myGamePiece.x + 25;
+  //   myPrincess.y = myGamePiece.y - 25; 
+    // setTimeout(function(){
+    //   window.location.href = "gnomes.html";
+    // }, 350)
+  // } else if (myPrincess.crashWith(myGamePiece)){
+  //   window.location.href = "gnomes.html";
+  // } else if (myPrincess.y === myGameArea.canvas.height - myPrincess.height) {
+  //   myGameArea.stop();
+  //   window.location.href = "game-over.html";
+  // } 
   myGameArea.clear();
   myBackground.speedX = -1;
   myBackground.update();
@@ -160,11 +172,11 @@ function updateGameArea() {
     myBackground.x = myBackground.x + 2;
     if (myGamePiece.image.src[myGamePiece.image.src.length - 5] === "1") {
       setTimeout(function(){
-        myGamePiece.image.src = "./assets/img/finn-L2.png";
+        myGamePiece.image.src = "./assets/img/jake-L.png";
       }, 200)
     } else {
       setTimeout(function(){
-        myGamePiece.image.src = "./assets/img/finn-L1.png";
+        myGamePiece.image.src = "./assets/img/jake-L.png";
       }, 200)
     }
   }
@@ -174,11 +186,11 @@ function updateGameArea() {
     myBackground.x = myBackground.x - 2;
     if (myGamePiece.image.src[myGamePiece.image.src.length - 5] === "1") {
       setTimeout(function(){
-        myGamePiece.image.src = "./assets/img/finn-R2.png";
+        myGamePiece.image.src = "./assets/img/jake-R.png";
       }, 200)
     } else {
       setTimeout(function(){
-        myGamePiece.image.src = "./assets/img/finn-R1.png";
+        myGamePiece.image.src = "./assets/img/jake-R.png";
       }, 200)
     }
   }
@@ -191,10 +203,15 @@ function updateGameArea() {
   
   myGamePiece.newPos();
   myGamePiece.update();
-  myPrincess.newPos();
-  myPrincess.update();
+  myGnome1.newPos();
+  myGnome1.update();  
+  myGnome2.newPos();
+  myGnome2.update();  
+  myGnome3.newPos();
+  myGnome3.update();  
   myObstacle.update();
   mySecondObstacle.update();
+  myThirdObstacle.update();
   if (myBackground.x <= -1280) {
     myBackground.x = -1280;
     console.log("WW");
@@ -202,9 +219,9 @@ function updateGameArea() {
   if (myBackground.x > 0) {
     myBackground.x = 0;
   }
-  if(myPrincess) {
-    myPrincess.gravity = .01;
-  }
+  // if(myPrincess) {
+  //   myPrincess.gravity = .01;
+  // }
 }
 
 // function fight(player, enemy) {
