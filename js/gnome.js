@@ -7,6 +7,11 @@ let myObstacle;
 let mySecondObstacle;
 let myThirdObstacle;
 let myBackground;
+let gnomeArray;
+let grandma1;
+let grandma2;
+let grandmaArray;
+let firepit;
 
 let myGameArea = {
   canvas : document.createElement("canvas"),
@@ -34,24 +39,30 @@ let myGameArea = {
 
 function startGame() {
   myGameArea.start();
-  myFinn = new component("image", 43, 70, "./assets/img/finn-R1.png", 10, 430);
-  myGamePiece = new component("image", 43, 70, "./assets/img/jake-L.png", 10, 430);
-  myGnome1 = new component("image", 70, 70, "./assets/img/gnome1.png", 525, 0);
-  myGnome2 = new component("image", 70, 70, "./assets/img/gnome2.png", 500, 0);
-  myGnome3 = new component("image", 70, 70, "./assets/img/gnome3.png", 550, 0);
-  myObstacle = new component("image", 100, 35, "./assets/img/log.png", 250, 375);
-  mySecondObstacle = new component("image", 100, 35, "./assets/img/log.png", 450, 275);
-  myThirdObstacle = new component("image", 100, 35, "./assets/img/log.png", 150, 175);
-  myBackground = new component("image", 2000, 500, "./assets/img/gnomebg.jpg", 0, 0);
+  myFinn = new component("image", 43, 70, "./assets/img/finn-R1.png", 10, 430, "finn");
+  myGamePiece = new component("image", 43, 70, "./assets/img/jake-L1.png", 10, 430, "jake");
+  grandma1 = new component("image", 50, 70, "./assets/img/grandma1.png", 330, 0, "grandma");
+  grandma2 = new component("image", 50, 70, "./assets/img/grandma2.png", 260, 0, "grandma");
+  myGnome1 = new component("image", 50, 70, "./assets/img/gnome1.png", 400, 0, "gnome");
+  myGnome2 = new component("image", 50, 70, "./assets/img/gnome2.png", 240, 0, "gnome");
+  myGnome3 = new component("image", 50, 70, "./assets/img/gnome3.png", 600, 0, "gnome");
+  gnomeArray = [myGnome1, myGnome2, myGnome3];
+  grandmaArray= [grandma1, grandma2];
+  firepit = new component("image", 100, 120, "./assets/img/fire.png", 1000, 600, "fire")
+  myObstacle = new component("image", 100, 35, "./assets/img/log.png", 320, 375, "platform");
+  mySecondObstacle = new component("image", 100, 35, "./assets/img/log.png", 520, 275, "platform");
+  myThirdObstacle = new component("image", 100, 35, "./assets/img/log.png", 220, 175, "platform");
+  myBackground = new component("image", 2000, 500, "./assets/img/gnomebg.jpg", 0, 0, "background");
   $(".col-md-8" ).append( myGameArea.canvas);
 };
 
-function component(type, width, height, color, x, y) {
+function component(type, width, height, color, x, y, name) {
   this.type = type;
   if (type === "image" || type === "background") {
     this.image = new Image();
     this.image.src = color;
   }
+  this.name = name;
   this.width = width;
   this.height = height;
   this.speedX = 0;
@@ -87,9 +98,11 @@ function component(type, width, height, color, x, y) {
     }
     this.y += this.speedY + this.jump + this.gravitySpeed;
     this.hitBottom();
-    this.hitTop();
-    this.hitLeft();
-    this.hitRight();
+    if (this.name != "gnome" && this.name != "grandma" && this.name !="fire") {
+      this.hitTop();
+      this.hitLeft();
+      this.hitRight();
+    }
     
   }
   this.hitBottom = function() {
@@ -149,58 +162,115 @@ function updateGameArea() {
     myGamePiece.gravitySpeed = 0;
     myGamePiece.jump = 0;
   }
-  // if (myGamePiece.x > myPrincess.x - myGamePiece.width && myGamePiece.x < myPrincess.x + myGamePiece.width && myGamePiece.y > myPrincess.y - myGamePiece.height && myGamePiece.y < myPrincess.y + myGamePiece.height){
-  //   myPrincess.x = myGamePiece.x + 25;
-  //   myPrincess.y = myGamePiece.y - 25; 
-    // setTimeout(function(){
-    //   window.location.href = "gnomes.html";
-    // }, 350)
-  // } else if (myPrincess.crashWith(myGamePiece)){
-  //   window.location.href = "gnomes.html";
-  // } else if (myPrincess.y === myGameArea.canvas.height - myPrincess.height) {
-  //   myGameArea.stop();
-  //   window.location.href = "game-over.html";
-  // } 
+  gnomeArray.forEach(function(gnome) {
+    if (gnome.crashWith(myObstacle)){
+      gnome.y = myObstacle.y - gnome.height;
+      gnome.gravitySpeed = 0;
+      gnome.jump = 0;
+    } else if (gnome.crashWith(mySecondObstacle)){
+      gnome.y = mySecondObstacle.y - gnome.height;
+      gnome.gravitySpeed = 0;
+      gnome.jump = 0;
+    } else if (gnome.crashWith(myThirdObstacle)){
+      gnome.y = myThirdObstacle.y - gnome.height;
+      gnome.gravitySpeed = 0;
+      gnome.jump = 0;
+    }
+    if (myGamePiece.x > gnome.x - myGamePiece.width && myGamePiece.x < gnome.x + myGamePiece.width && myGamePiece.y > gnome.y - myGamePiece.height && myGamePiece.y < gnome.y + myGamePiece.height){
+      gnome.x = myGamePiece.x + 25;
+      gnome.y = myGamePiece.y - 25;
+      gnome.gravitySpeed = 0;
+      myGamePiece.image.src = "./assets/img/jake-angry.png";
+      myGamePiece.width = 80;
+      myGamePiece.height = 120;
+    }
+  })
+  grandmaArray.forEach(function(gnome) {
+    if (gnome.crashWith(myObstacle)){
+      gnome.y = myObstacle.y - gnome.height;
+      gnome.gravitySpeed = 0;
+      gnome.jump = 0;
+      
+    } else if (gnome.crashWith(mySecondObstacle)){
+      gnome.y = mySecondObstacle.y - gnome.height;
+      gnome.gravitySpeed = 0;
+      gnome.jump = 0;
+    } else if (gnome.crashWith(myThirdObstacle)){
+      gnome.y = myThirdObstacle.y - gnome.height;
+      gnome.gravitySpeed = 0;
+      gnome.jump = 0;
+    }
+  })
   myGameArea.clear();
-  myBackground.speedX = -1;
   myBackground.update();
   myGamePiece.speedX = 0;
   myGamePiece.speedY = 0;
 
   if (myGameArea.keys && myGameArea.keys[65]) {
     myGamePiece.speedX = -4;
-    myBackground.x = myBackground.x + 2;
+    myBackground.x += 2;
+    myObstacle.x += 3;
+    mySecondObstacle.x += 3;
+    myThirdObstacle.x += 3;
+    myGnome1.x += 3;
+    myGnome2.x += 3;
+    myGnome3.x += 3;
+    grandma1.x +=3;
+    grandma2.x +=3;
+    firepit.x +=3;
     if (myGamePiece.image.src[myGamePiece.image.src.length - 5] === "1") {
       setTimeout(function(){
-        myGamePiece.image.src = "./assets/img/jake-L.png";
+        myGamePiece.image.src = "./assets/img/jake-L2.png";
       }, 200)
     } else {
       setTimeout(function(){
-        myGamePiece.image.src = "./assets/img/jake-L.png";
+        myGamePiece.image.src = "./assets/img/jake-L1.png";
       }, 200)
     }
   }
 
   if (myGameArea.keys && myGameArea.keys[68]) {
     myGamePiece.speedX = 4;
-    myBackground.x = myBackground.x - 2;
+    myObstacle.x -= 3;
+    mySecondObstacle.x -= 3;
+    myThirdObstacle.x -= 3;
+    myGnome1.x -= 3;
+    myGnome2.x -= 3;
+    myGnome3.x -= 3;
+    grandma1.x -= 3;
+    grandma2.x -= 3;
+    firepit.x -= 3;
+    myBackground.x -= 2;
     if (myGamePiece.image.src[myGamePiece.image.src.length - 5] === "1") {
       setTimeout(function(){
-        myGamePiece.image.src = "./assets/img/jake-R.png";
+        myGamePiece.image.src = "./assets/img/jake-R2.png";
       }, 200)
     } else {
       setTimeout(function(){
-        myGamePiece.image.src = "./assets/img/jake-R.png";
+        myGamePiece.image.src = "./assets/img/jake-R1.png";
       }, 200)
     }
   }
+
+  gnomeArray.forEach(function(gnome) {
+    if (gnome.crashWith(firepit)){
+      gnome.x = 20000;
+      myGamePiece.width = 43;
+      myGamePiece.height = 70;
+    }
+  })
+
+  
 
   if (myGameArea.keys && myGameArea.keys[83]) {
     myGamePiece.speedY = 4; }
   if (myGameArea.keys && myGameArea.keys[32] && myGamePiece.speedY === 0) {
     myGamePiece.jump = -10;}
   console.log(myGamePiece.image.src[myGamePiece.image.src.length - 6], myGamePiece.image.src[myGamePiece.image.src.length - 5])
-  
+  grandma1.newPos();
+  grandma1.update();
+  grandma2.newPos();
+  grandma2.update();
   myGamePiece.newPos();
   myGamePiece.update();
   myGnome1.newPos();
@@ -209,6 +279,8 @@ function updateGameArea() {
   myGnome2.update();  
   myGnome3.newPos();
   myGnome3.update();  
+  firepit.newPos();
+  firepit.update();  
   myObstacle.update();
   mySecondObstacle.update();
   myThirdObstacle.update();
@@ -219,43 +291,19 @@ function updateGameArea() {
   if (myBackground.x > 0) {
     myBackground.x = 0;
   }
-  // if(myPrincess) {
-  //   myPrincess.gravity = .01;
-  // }
+  setTimeout(function(){
+    grandma1.x = -20000
+  }, 5000);
+  setTimeout(function(){
+    grandma2.x = -20000
+  }, 7500);
+  if (myGnome1.x > 10000 && myGnome2.x > 10000 && myGnome3.x > 10000){
+    setTimeout(function(){
+      window.location.href = "game-over.html"
+    }, 10)
+  }
 }
-
-// function fight(player, enemy) {
-//   let turn = true;
-//   if (turn === true) {
-//     player.playerAttack();
-//     turn = !turn;
-//   }else if (turn = false) {
-//     enemy.enemyAttack();
-//     turn = !turn;
-//   }
-// }
-
-// function displayPlayer(player) {
-//   $(".name").html(player.name);
-//   $(".hp").html(player.hp);
-// }
 
 $(document).ready(function() {
   startGame();
-  // myGameArea.start();
-  // myGamePiece = new component(30, 30, "red", 10, 120);
-  // myGamePiece = new component(30, 30, ".assets/img/jake.png", 10, 120, "image");
-  //let Finn = new Player("Finn", 50, "Sword");
-  //let Jake = new Player("Jake", 50, "Fist");
-  //let Gnome1 = new Enemy(15);
-  //let Gnome2 = new Enemy(15);
-  //let Gnome3 = new Enemy(15);
-  //let Ogre = new Enemy(50);
-  //let Beast = new Enemy(50);
-  // let newItem = ("#items").val();
-  // $(".buy").on("click", function(){
-  //   if (newItem==="Potion"){
-  //     Finn.inventory.push(newItem);
-  //   }
-  // });
 });

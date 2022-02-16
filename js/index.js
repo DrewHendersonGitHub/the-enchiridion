@@ -207,38 +207,6 @@ function updateGameArea() {
   }
 }
 
-// function fight(player, enemy) {
-//   let turn = true;
-//   if (turn === true) {
-//     player.playerAttack();
-//     turn = !turn;
-//   }else if (turn = false) {
-//     enemy.enemyAttack();
-//     turn = !turn;
-//   }
-// }
-
-// function displayPlayer(player) {
-//   $(".name").html(player.name);
-//   $(".hp").html(player.hp);
-// }
-
 $(document).ready(function() {
   startGame();
-  // myGameArea.start();
-  // myGamePiece = new component(30, 30, "red", 10, 120);
-  // myGamePiece = new component(30, 30, ".assets/img/jake.png", 10, 120, "image");
-  //let Finn = new Player("Finn", 50, "Sword");
-  //let Jake = new Player("Jake", 50, "Fist");
-  //let Gnome1 = new Enemy(15);
-  //let Gnome2 = new Enemy(15);
-  //let Gnome3 = new Enemy(15);
-  //let Ogre = new Enemy(50);
-  //let Beast = new Enemy(50);
-  // let newItem = ("#items").val();
-  // $(".buy").on("click", function(){
-  //   if (newItem==="Potion"){
-  //     Finn.inventory.push(newItem);
-  //   }
-  // });
 });

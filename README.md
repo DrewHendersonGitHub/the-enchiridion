@@ -16,7 +16,7 @@ Co-authored-by: Isaac Overstreet <isaacoverstreet3@gmail.com>"
 * _Bootstrap_
 * _JavaScript_
 * _Jquery_
-* __
+* _gnomes_
 
 ## Description
 
